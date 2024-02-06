@@ -1,0 +1,20 @@
+name: thirdfactor
+description: "Flutter package for ThirdFactor Verification"
+version: 0.0.1
+
+environment:
+  sdk: ">=3.2.1 <4.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  permission_handler: ^11.2.0
+  webview_flutter: ^4.4.4
+  webview_flutter_android: ^3.14.0
+  webview_flutter_wkwebview: ^3.10.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
