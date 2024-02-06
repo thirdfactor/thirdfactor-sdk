@@ -45,6 +45,42 @@ void main() {
 }
 ```
 
+#### Customizing Transition Animation
+
+You can customize the transition animation when pushing or popping routes using the transitionBuilder parameter in ThirdFactorScope.
+
+```dart
+ThirdFactorScope(
+  // Other parameters ....
+  transitionBuilder: (_, animation, __, child) {
+    const begin = Offset(1.0, 0.0);
+    const end = Offset.zero;
+    const curve = Curves.easeInOut;
+    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+    var offsetAnimation = animation.drive(tween);
+    return SlideTransition(
+      position: offsetAnimation,
+      child: child,
+    );
+  },
+  transitionDuration: Duration(millisecond:300),
+  reverseTransitionDuration: Duration(millisecond:300),
+)
+```
+
+#### Customizing Loading Indicator
+
+You can customize the loading animation when initializing the ThirdFactor Verifcation.
+
+```dart
+ThirdFactorScope(
+  // Other parameters ....
+  loadingBuilder: (progress) {
+    return YourCustomLoadingWidget();
+  },
+)
+```
+
 ### 3. Start Verification
 
 Initiate the ThirdFactor Verification process in your app:
