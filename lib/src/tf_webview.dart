@@ -60,17 +60,23 @@ class _TfWebViewState extends State<TfWebView> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(onPageFinished: (_) {
-          setState(() {
-            _isLoading = false;
-          });
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+            });
+          }
         }, onPageStarted: (_) {
-          setState(() {
-            _isLoading = true;
-          });
+          if (mounted) {
+            setState(() {
+              _isLoading = true;
+            });
+          }
         }, onProgress: (progress) {
-          setState(() {
-            _progress = progress;
-          });
+          if (mounted) {
+            setState(() {
+              _progress = progress;
+            });
+          }
         }),
       )
       ..addJavaScriptChannel("TFSDKCHANNEL",
