@@ -1,5 +1,5 @@
 name: thirdfactor
-description: "Flutter package for ThirdFactor Verification"
+description: "Flutter package for ThirdFactor Verification"cd 
 version: 0.0.1
 
 environment:
@@ -20,3 +20,4 @@ dev_dependencies:
   mockito: ^5.4.4
   flutter_lints: ^2.0.0
   plugin_platform_interface: ^2.1.8
+  webview_flutter_platform_interface: ^2.10.0
