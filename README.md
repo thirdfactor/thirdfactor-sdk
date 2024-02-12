@@ -25,6 +25,21 @@ flutter pub get
 import 'package:thirdfactor/thirdfactor.dart';
 ```
 
+#### Platform Specific Setup
+
+In your iOS project, you need to add a description for camera usage in the `Info.plist` file. Open `ios/Runner/Info.plist` and add the following lines:
+
+```xml
+<key>NSCameraUsageDescription</key>
+<string>Describe why your application requires access to device camera.</string>
+```
+
+For Android, you'll need to add the camera permission to your `AndroidManifest.xml` file and provide a rationale for the user. Open `android/app/src/main/AndroidManifest.xml` and add the following lines:
+
+```xml
+<uses-permission android:name="android.permission.CAMERA" />
+```
+
 ### 2. Initialize ThirdFactorScope
 
 Wrap your application with ThirdFactorScope to enable ThirdFactor Verification:
