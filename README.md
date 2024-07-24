@@ -150,3 +150,18 @@ TfOnboardingOptions onboardingOptions = TfOnboardingOptions(
   controlAlignment: Alignment.topCenter, // Alignment for control buttons
 );
 ```
+### Handling Responses from Thirdfactor Server
+
+We use a JavaScript channel to handle messages from the Thirdfactor server. This is crucial for processing scanned documents or other data returned from the server.
+
+```dart
+..addJavaScriptChannel("TFSDKCHANNEL",
+    onMessageReceived: (JavaScriptMessage message) {
+  try {
+    final response = TfResponse.fromJson(message.message);
+    widget.onCompletion(response);
+    Navigator.of(context).pop();
+  } catch (_) {
+    throw Exception("Couldn't decode response from Thirdfactor server");
+  }
+})
