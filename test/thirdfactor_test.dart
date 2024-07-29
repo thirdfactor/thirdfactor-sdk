@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:thirdfactor/src/onboarding/tf_onboarding.dart';
 import 'package:thirdfactor/src/tf_webview.dart';
 import 'package:thirdfactor/thirdfactor.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+// import 'package:webview_flutter/webview_flutter.dart';
 
 import 'mocks/thirdfactor_mocks.dart';
 
@@ -11,7 +11,7 @@ void main() {
   group('WebView', () {
     // Set the mock implementation before running tests
     setUp(() {
-      WebViewPlatform.instance = MockWebViewPlatform();
+      // WebViewPlatform.instance = MockWebViewPlatform();
     });
 
     testWidgets(
