@@ -74,10 +74,16 @@ class _TfWebViewState extends State<TfWebView> {
         "TFSDKCHANNEL",
         onMessageReceived: (JavaScriptMessage message) {
           try {
-            final response = TfResponse.fromJson(message.message);
-            widget.onCompletion(response);
+            print("Received message: ${message}");
+            // final response = TfResponse.fromJson(message.message);
+            // print("Decoded response: $response");
+            // widget.onCompletion(response);
             Navigator.of(context).pop();
-          } catch (_) {
+          } catch (e) {
+            print("Error decoding response: $e");
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Couldn't decode response from Thirdfactor server")),
+            );
             throw Exception("Couldn't decode response from Thirdfactor server");
           }
         },
@@ -97,7 +103,7 @@ class _TfWebViewState extends State<TfWebView> {
     try {
       final XFile? image = await _imagePicker.pickImage(source: ImageSource.gallery);
       if (image != null) {
-        return [Uri.file(image.path).toString()]; 
+        return [Uri.file(image.path).toString()];
       }
     } catch (e) {
       print('Error picking image: $e');
