@@ -23,6 +23,7 @@ class DioClient {
   Future<void> _initializeDio() async {
     _dio = Dio(
       BaseOptions(
+        // baseUrl: 'https://thirdfactor.prixa.live/tfauth',
         baseUrl: 'https://khaltitf.prixa.live/tfauth',
         responseType: ResponseType.json,
       ),
@@ -38,6 +39,7 @@ class DioClient {
           "jwt_token": jwtToken,
         },
       );
+      print("this is value $response");
       if (response.statusCode == null) return null;
       if (!_validateStatusCode(response.statusCode!)) return null;
       return response.data?["url"];

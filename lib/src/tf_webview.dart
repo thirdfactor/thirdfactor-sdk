@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:thirdfactor/src/core/thirdfactor.dart';
@@ -74,10 +75,11 @@ class _TfWebViewState extends State<TfWebView> {
         "TFSDKCHANNEL",
         onMessageReceived: (JavaScriptMessage message) {
           try {
-            print("Received message: ${message}");
-            // final response = TfResponse.fromJson(message.message);
+            print("Received message: ${jsonDecode(message.message)['documentPhoto'] }");
+            // print("Received message: ${message.}");
+            final response = TfResponse.fromJson(message.message);
             // print("Decoded response: $response");
-            // widget.onCompletion(response);
+            widget.onCompletion(response);
             Navigator.of(context).pop();
           } catch (e) {
             print("Error decoding response: $e");

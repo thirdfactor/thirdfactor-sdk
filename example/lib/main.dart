@@ -1,10 +1,7 @@
-// Import Dart's convert library for encoding and decoding data
 import 'dart:convert';
-
-// Import Flutter libraries and packages
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tf_example/dio_client.dart'; // Import Dio Client for making network requests
+import 'package:tf_example/dio_client.dart';
 import 'package:thirdfactor/thirdfactor.dart';
 
 void main() {
@@ -16,16 +13,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize the Flutter application with ThirdFactorScope
+    // Initialize the Flutter application with ThirdFactorScope for e-KYC verification
     return ThirdFactorScope(
-      clientId: "YOUR_CLIENT_ID", // Replace with your client ID
+      clientId: "YOUR_CLIENT_ID",
       transitionBuilder: (_, animation, __, child) {
-        // Define a custom transition animation for page navigation
         const begin = Offset(0.0, 1.0);
         const end = Offset.zero;
         const curve = Curves.easeInOut;
-        var tween =
-        Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
         var offsetAnimation = animation.drive(tween);
         return SlideTransition(
           position: offsetAnimation,
@@ -33,7 +28,6 @@ class MyApp extends StatelessWidget {
         );
       },
       builder: (context, navKey) {
-        // Build the MaterialApp with ThirdFactorScope
         return MaterialApp(
           navigatorKey: navKey,
           title: 'TingTing',
@@ -46,7 +40,7 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
             textTheme: GoogleFonts.poppinsTextTheme(),
           ),
-          home: const MyHomePage(), // Set the initial page as MyHomePage
+          home: const MyHomePage(),
         );
       },
     );
@@ -54,9 +48,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({
-    super.key,
-  });
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -72,20 +64,23 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    dioClient = DioClient(); // Initialize DioClient for network requests
-    generateVerificationUrl(); // Generate initial verification URL
+    dioClient = DioClient();
+
+    if (tfResponse != null) {
+      sessionUrl == null;
+      generateVerificationUrl();
+    }
   }
 
+  // Generates the e-KYC verification URL using DioClient
   Future<void> generateVerificationUrl() async {
     try {
       setState(() {
         loading = true;
       });
 
-      // Make a network request to generate a verification URL
       final url = await dioClient.generateVerificationUrl(
-          jwtToken: _nameController.text
-        // jwtToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ik5pa2hpbCBTaHJlc3RoYSIsImlzcyI6IklaODM3MVFaNDAiLCJ0b2tlbiI6IjNJUlk2NjM4NE4iLCJpYXQiOjE1MTYyMzkwMjIsImlkZW50aWZpZXIiOiI2IiwiaXNfc2RrIjp0cnVlLCJsYWJlbCI6IkFuamVsaWthIFNhaCIsInNlY29uZGFyeV9sYWJlbCI6ImFuamVsaWthIiwiY2FsbGJhY2siOiJodHRwczovL3dlYmhvb2suc2l0ZS8wMTczNThiMS0yOGFhLTQ2YTgtYjlhNS1kY2JhNGIyYThlM2EifQ.5GC_SQ71STZJv3LjfYqIOCXD-NLFsKBaFf4PKXo-p5Yx", // Replace with your JWT token
+          jwtToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
       );
 
       if (url != null) {
@@ -109,11 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         centerTitle: true,
       ),
-      body:
-      // LoadingWidget(
-      // isLoading: loading,
-      // child:
-      SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Column(
@@ -137,29 +128,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               const SizedBox(height: 16),
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Add token',
-                ),
-                // Optionally, you can add validation logic
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please Add token first';
-                  }
-                  return null;
-                },
-              ),
               const SizedBox(height: 16),
               Align(
                 alignment: Alignment.centerRight,
                 child: OutlinedButton.icon(
                   onPressed: () async {
-                    // if (sessionUrl == null) {
                     generateVerificationUrl();
-                    // };
 
-                    // Start ThirdFactor verification
                     await ThirdFactorScope.of(context).startVerification(
                       verificationUrl: sessionUrl!,
                       onCompletion: (val) {
@@ -199,60 +174,55 @@ class _MyHomePageState extends State<MyHomePage> {
               tfResponse != null
                   ? Card(
                 margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Padding(
+                child: tfResponse!.documentPhotos != null
+                    ? Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      tfResponse!.imageBytes != null
-                          ? Padding(
-                        padding:
-                        const EdgeInsets.only(bottom: 8.0),
-                        child: Image.memory(
-                          base64Decode(tfResponse!.imageBytes!
-                              .split(',')
-                              .last),
-                          height: size.height * 0.4,
-                        ),
+                      tfResponse!.documentPhotos != null
+                          ? ListView.builder(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: tfResponse!.documentPhotos!.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Image.memory(
+                              base64Decode(
+                                tfResponse!.documentPhotos![index].originalPhoto!,
+                              ),
+                              height: size.height * 0.4,
+                            ),
+                          );
+                        },
                       )
                           : const SizedBox.shrink(),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("status: ${tfResponse!.status}"),
-                          Text.rich(
-                            TextSpan(text: "message: ", children: [
-                              TextSpan(
-                                text: tfResponse!.message,
-                                style: TextStyle(
-                                  color: tfResponse!.status
-                                      ? Colors.green
-                                      : Colors.red,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              )
-                            ]),
-                          ),
+                          Text("nationality: ${tfResponse!.documentPhotos![0].nationality}"),
+                          Text("documentNumber: ${tfResponse!.documentPhotos![0].documentNumber}"),
                         ],
                       )
                     ],
                   ),
-                ),
+                )
+                    : const SizedBox.shrink(),
               )
                   : const SizedBox.shrink(),
             ],
           ),
         ),
-        //   ),
       ),
     );
   }
 }
 
 class LoadingWidget extends StatelessWidget {
-  const LoadingWidget(
-      {super.key, required this.isLoading, required this.child});
+  const LoadingWidget({super.key, required this.isLoading, required this.child});
   final bool isLoading;
   final Widget child;
 
@@ -264,9 +234,7 @@ class LoadingWidget extends StatelessWidget {
         opacity: isLoading ? 0.5 : 1,
         child: Stack(children: [
           child,
-          isLoading
-              ? const Center(child: CircularProgressIndicator.adaptive())
-              : const SizedBox.shrink(),
+          isLoading ? const Center(child: CircularProgressIndicator.adaptive()) : const SizedBox.shrink(),
         ]),
       ),
     );

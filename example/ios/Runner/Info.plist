@@ -52,5 +52,7 @@
     </dict>
 	<key>NSCameraUsageDescription</key>
 	<string>TingTing needs access to your camera for eKYC verification.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>This app requires access to your photo library to allow you to upload and share images with others.</string>
 </dict>
 </plist>

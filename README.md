@@ -155,13 +155,47 @@ TfOnboardingOptions onboardingOptions = TfOnboardingOptions(
 We use a JavaScript channel to handle messages from the Thirdfactor server. This is crucial for processing scanned documents or other data returned from the server.
 
 ```dart
-..addJavaScriptChannel("TFSDKCHANNEL",
-    onMessageReceived: (JavaScriptMessage message) {
-  try {
-    final response = TfResponse.fromJson(message.message);
-    widget.onCompletion(response);
-    Navigator.of(context).pop();
-  } catch (_) {
-    throw Exception("Couldn't decode response from Thirdfactor server");
-  }
-})
+ tfResponse != null
+? Card(
+margin: const EdgeInsets.symmetric(horizontal: 8.0),
+child: tfResponse!.documentPhotos != null
+? Padding(
+padding: const EdgeInsets.all(16.0),
+child: Column(
+mainAxisSize: MainAxisSize.min,
+mainAxisAlignment: MainAxisAlignment.center,
+children: [
+tfResponse!.documentPhotos != null
+? ListView.builder(
+padding: const EdgeInsets.only(bottom: 8.0),
+shrinkWrap: true,
+physics: const NeverScrollableScrollPhysics(),
+itemCount: tfResponse!.documentPhotos!.length,
+itemBuilder: (context, index) {
+return Padding(
+padding: const EdgeInsets.only(bottom: 8.0),
+child: Image.memory(
+base64Decode(
+tfResponse!.documentPhotos![index].originalPhoto!,
+),
+height: size.height * 0.4,
+),
+);
+},
+)
+: const SizedBox.shrink(),
+Column(
+crossAxisAlignment: CrossAxisAlignment.start,
+children: [
+Text("nationality: ${tfResponse!.documentPhotos![0].nationality}"),
+Text("documentNumber: ${tfResponse!.documentPhotos![0].documentNumber}"),
+],
+)
+],
+),
+)
+: const SizedBox.shrink(),
+)
+: const SizedBox.shrink(),
+
+
