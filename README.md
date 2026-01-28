@@ -27,21 +27,17 @@ import 'package:thirdfactor/thirdfactor.dart';
 
 #### Platform Specific Setup
 
-In your iOS project, you need to add a description for camera usage and Photo Library in the `Info.plist` file. Open `ios/Runner/Info.plist` and add the following lines:
+In your iOS project, you need to add a description for camera usage in the `Info.plist` file. Open `ios/Runner/Info.plist` and add the following lines:
 
 ```xml
 <key>NSCameraUsageDescription</key>
 <string>Describe why your application requires access to device camera.</string>
-<key>NSPhotoLibraryUsageDescription</key>
-<string>Describe why your application requires access to the photo library.</string>
 ```
 
-For Android, you'll need to add the camera permission and Storage to your `AndroidManifest.xml` file and provide a rationale for the user. Open `android/app/src/main/AndroidManifest.xml` and add the following lines:
+For Android, you'll need to add the camera permission to your `AndroidManifest.xml` file and provide a rationale for the user. Open `android/app/src/main/AndroidManifest.xml` and add the following lines:
 
 ```xml
 <uses-permission android:name="android.permission.CAMERA" />
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 ```
 
 ### 2. Initialize ThirdFactorScope
@@ -52,7 +48,11 @@ Wrap your application with ThirdFactorScope to enable ThirdFactor Verification:
 void main() {
   runApp(
     ThirdFactorScope(
-      clientId: "YOUR_CLIENT_ID",
+      /// `clientId` is only required when you start the verification flow.
+      /// If you're only using `ThirdFactorScope` to inject/update the `navigatorKey`,
+      /// you can omit it or pass `null`.
+      clientId: "YOUR_CLIENT_ID", // Optional (required only for verification)
+
       builder: (context, navigatorKey) {
         return MaterialApp(
           navigatorKey: navigatorKey,
@@ -153,21 +153,4 @@ TfOnboardingOptions onboardingOptions = TfOnboardingOptions(
   scrollPhysics: BouncingScrollPhysics(),
   controlAlignment: Alignment.topCenter, // Alignment for control buttons
 );
-```
-
-### Handling Responses from Thirdfactor Server
-
-We use a JavaScript channel to handle messages from the Thirdfactor server. This is crucial for processing scanned documents or other data returned from the server.
-
-```dart
-..addJavaScriptChannel("TFSDKCHANNEL",
-    onMessageReceived: (JavaScriptMessage message) {
-  try {
-    final response = TfResponse.fromJson(message.message);
-    widget.onCompletion(response);
-    Navigator.of(context).pop();
-  } catch (_) {
-    throw Exception("Couldn't decode response from Thirdfactor server");
-  }
-})
 ```

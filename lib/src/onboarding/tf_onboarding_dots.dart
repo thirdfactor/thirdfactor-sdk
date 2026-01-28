@@ -26,7 +26,7 @@ class TfDotsIndicator extends StatelessWidget {
 
   /// Creates a [TfDotsIndicator] with the provided properties.
   TfDotsIndicator({
-    Key? key,
+    super.key,
     required this.dotsCount,
     this.position = 0,
     this.decorator = const TfDotsDecorator(),
@@ -54,8 +54,7 @@ class TfDotsIndicator extends StatelessWidget {
         assert(
             decorator.activeShapes.isEmpty ||
                 decorator.activeShapes.length == dotsCount,
-            'The "activeShapes" parameter in the decorator must be empty or have the same length as dotsCount parameter.'),
-        super(key: key);
+            'The "activeShapes" parameter in the decorator must be empty or have the same length as dotsCount parameter.');
 
   /// Wraps a dot widget with InkWell to enable tap interactions.
   Widget _wrapInkwell(Widget dot, int index) {

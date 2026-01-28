@@ -1,10 +1,12 @@
 /// The `thirdfactor` library provides widgets for initializing ThirdFactor Verification in a Flutter application.
 /// It includes components for onboarding, web view, and client configurations.
+library;
 import 'package:flutter/material.dart';
 import 'package:thirdfactor/src/model/tf_response.dart';
 import 'package:thirdfactor/src/onboarding/tf_onboarding.dart';
 import 'package:thirdfactor/src/onboarding/tf_onboarding_options.dart';
-import 'package:thirdfactor/src/tf_webview.dart';
+
+import '../verification/tf_start_verification.dart';
 
 /// The [ThirdFactorScope] builder.
 typedef ThirdFactorScopeBuilder = Widget Function(
@@ -56,8 +58,8 @@ class ThirdFactorScope extends StatefulWidget {
   /// [loadingBuilder]: A function that builds the loading indicator widget during the verification process. Defaults to [_defaultLoadingIndicator].
 
   ThirdFactorScope({
-    Key? key,
-    required String clientId,
+    super.key,
+     String clientId  = "",
     required ThirdFactorScopeBuilder builder,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)
         transitionBuilder = _defaultTransitionsBuilder,
@@ -71,8 +73,7 @@ class ThirdFactorScope extends StatefulWidget {
         _transitionDuration = transitionDuration,
         _reverseTransitionDuration = reverseTransitionDuration,
         _clientId = clientId,
-        _loadingBuilder = loadingBuilder,
-        super(key: key);
+        _loadingBuilder = loadingBuilder;
 
   /// The ThirdFactor clientId.
   final String _clientId;
@@ -125,21 +126,21 @@ class ThirdFactorScope extends StatefulWidget {
                   onboardingOptions: onboardingOptions,
                   onOnboardingComplete: () {
                     navigatorState.pushReplacement(
-                      _customPageRouteBuilder(
-                        TfWebView(
-                          verificationUrl: verificationUrl,
-                          onCompletion: onCompletion,
-                          loadingBuilder: _loadingBuilder,
-                        ),
+                _customPageRouteBuilder(
+                        const TfStartVerification(
+                            // verificationUrl: verificationUrl,
+                            // onCompletion: onCompletion,
+                            // loadingBuilder: _loadingBuilder,
+                            ),
                       ),
                     );
                   },
                 )
-              : TfWebView(
-                  verificationUrl: verificationUrl,
-                  onCompletion: onCompletion,
-                  loadingBuilder: _loadingBuilder,
-                ),
+              : const TfStartVerification(
+                  // verificationUrl: verificationUrl,
+                  // onCompletion: onCompletion,
+                  // loadingBuilder: _loadingBuilder,
+                  ),
         ),
       );
     } catch (_) {
@@ -185,10 +186,9 @@ class _ThirdFactorScopeState extends State<ThirdFactorScope>
 
 class _InheritedThirdFactorScope extends InheritedWidget {
   const _InheritedThirdFactorScope({
-    Key? key,
     required this.scope,
-    required Widget child,
-  }) : super(key: key, child: child);
+    required super.child,
+  });
 
   final ThirdFactorScope scope;
 

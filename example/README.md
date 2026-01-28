@@ -1,5 +1,16 @@
-# ThirdFactor Example App
+# example
 
-This example demonstrates the usage of the ThirdFactor Flutter library for e-KYC verification in a Flutter application.
+A new Flutter project.
 
-``Remember to replace placeholders such as `YOUR_CLIENT_ID`and`YOUR_JWT_TOKEN` with your actual values.```
+## Getting Started
+
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.

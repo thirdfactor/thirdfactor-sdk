@@ -2,10 +2,11 @@
 import 'dart:convert';
 
 // Import Flutter libraries and packages
+import 'package:example/dio_client.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tf_example/dio_client.dart'; // Import Dio Client for making network requests
 import 'package:thirdfactor/thirdfactor.dart';
+import 'package:camera/camera.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Initialize the Flutter application with ThirdFactorScope
     return ThirdFactorScope(
-      clientId: "YOUR_CLIENT_ID", // Replace with your client ID
+      // clientId: "YOUR_CLIENT_ID", // Replace with your client ID
       transitionBuilder: (_, animation, __, child) {
         // Define a custom transition animation for page navigation
         const begin = Offset(0.0, 1.0);
@@ -67,12 +68,34 @@ class _MyHomePageState extends State<MyHomePage> {
   TfResponse? tfResponse;
   bool loading = false;
   late final DioClient dioClient;
+  CameraController? _cameraController;
+  bool _isCameraInitialized = false;
 
   @override
   void initState() {
     super.initState();
     dioClient = DioClient(); // Initialize DioClient for network requests
     generateVerificationUrl(); // Generate initial verification URL
+    _initializeCamera();
+  }
+
+  Future<void> _initializeCamera() async {
+    final cameras = await availableCameras();
+
+    // Select the front camera
+    final frontCamera = cameras.firstWhere(
+      (camera) => camera.lensDirection == CameraLensDirection.front,
+    );
+
+    _cameraController = CameraController(
+      frontCamera,
+      ResolutionPreset.medium,
+    );
+
+    await _cameraController!.initialize();
+    setState(() {
+      _isCameraInitialized = true;
+    });
   }
 
   Future<void> generateVerificationUrl() async {
@@ -83,7 +106,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
       // Make a network request to generate a verification URL
       final url = await dioClient.generateVerificationUrl(
-        jwtToken: "YOUR_JWT_TOKEN", // Replace with your JWT token
+        jwtToken:
+            "YOUR_JWT_TOKEN", // Replace with your JWT token
       );
 
       if (url != null) {
@@ -114,6 +138,56 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Column(
               children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  child: SizedBox(
+                    width: 180,
+                    height: 270,
+                    child: _isCameraInitialized
+                        ? Stack(
+                          children: [
+                            CameraPreview(_cameraController!),
+                    ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                        Colors.white,
+                        BlendMode.srcOut,
+                      ), // This one will create the magic
+                      child: Stack(
+                        // fit: StackFit.,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              backgroundBlendMode: BlendMode.dstOut,
+                            ), // This one will handle background + difference out
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              height: 180,
+                              width: 180,
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(
+                                  MediaQuery.of(context).size.width / 2,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                          ],
+                    )
+
+                        : Container(
+                            color: Colors.black,
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                  ),
+                ),
                 SizedBox(height: size.height * 0.1),
                 Image.asset(
                   "assets/images/ting.png",
@@ -233,6 +307,7 @@ class _MyHomePageState extends State<MyHomePage> {
 class LoadingWidget extends StatelessWidget {
   const LoadingWidget(
       {super.key, required this.isLoading, required this.child});
+
   final bool isLoading;
   final Widget child;
 

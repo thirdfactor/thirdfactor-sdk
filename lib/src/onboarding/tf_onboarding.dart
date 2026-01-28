@@ -20,10 +20,10 @@ class TfOnboarding extends StatefulWidget {
 
   /// Creates a [TfOnboarding] instance with the provided properties.
   const TfOnboarding({
-    Key? key,
+    super.key,
     required this.onboardingOptions,
     required this.onOnboardingComplete,
-  }) : super(key: key);
+  });
 
   @override
   TfOnboardingState createState() => TfOnboardingState();
@@ -68,6 +68,7 @@ class TfOnboardingState extends State<TfOnboarding> {
       widget.onboardingOptions.onDone!();
     }
     widget.onOnboardingComplete();
+
   }
 
   Future<void> animateScroll(int page) async {
@@ -175,11 +176,11 @@ class OnboardingButton extends StatelessWidget {
 
   /// Creates an [OnboardingButton] instance with the provided properties.
   const OnboardingButton({
-    Key? key,
+    super.key,
     required this.title,
     this.onPressed,
     this.custom,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
