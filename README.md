@@ -42,17 +42,13 @@ For Android, you'll need to add the camera permission to your `AndroidManifest.x
 
 ### 2. Initialize ThirdFactorScope
 
-Wrap your application with ThirdFactorScope to enable ThirdFactor Verification:
+Wrap your application with ThirdFactorScope to enable ThirdFactor Verification where clientId is optional :
 
 ```dart
 void main() {
   runApp(
     ThirdFactorScope(
-      /// `clientId` is only required when you start the verification flow.
-      /// If you're only using `ThirdFactorScope` to inject/update the `navigatorKey`,
-      /// you can omit it or pass `null`.
-      clientId: "YOUR_CLIENT_ID", // Optional (required only for verification)
-
+      clientId: "YOUR_CLIENT_ID",
       builder: (context, navigatorKey) {
         return MaterialApp(
           navigatorKey: navigatorKey,
@@ -154,3 +150,52 @@ TfOnboardingOptions onboardingOptions = TfOnboardingOptions(
   controlAlignment: Alignment.topCenter, // Alignment for control buttons
 );
 ```
+### Handling Responses from Thirdfactor Server
+
+We use a JavaScript channel to handle messages from the Thirdfactor server. This is crucial for processing scanned documents or other data returned from the server.
+
+```dart
+ tfResponse != null
+? Card(
+margin: const EdgeInsets.symmetric(horizontal: 8.0),
+child: tfResponse!.documentPhotos != null
+? Padding(
+padding: const EdgeInsets.all(16.0),
+child: Column(
+mainAxisSize: MainAxisSize.min,
+mainAxisAlignment: MainAxisAlignment.center,
+children: [
+tfResponse!.documentPhotos != null
+? ListView.builder(
+padding: const EdgeInsets.only(bottom: 8.0),
+shrinkWrap: true,
+physics: const NeverScrollableScrollPhysics(),
+itemCount: tfResponse!.documentPhotos!.length,
+itemBuilder: (context, index) {
+return Padding(
+padding: const EdgeInsets.only(bottom: 8.0),
+child: Image.memory(
+base64Decode(
+tfResponse!.documentPhotos![index].originalPhoto!,
+),
+height: size.height * 0.4,
+),
+);
+},
+)
+: const SizedBox.shrink(),
+Column(
+crossAxisAlignment: CrossAxisAlignment.start,
+children: [
+Text("nationality: ${tfResponse!.documentPhotos![0].nationality}"),
+Text("documentNumber: ${tfResponse!.documentPhotos![0].documentNumber}"),
+],
+)
+],
+),
+)
+: const SizedBox.shrink(),
+)
+: const SizedBox.shrink(),
+
+
