@@ -57,7 +57,7 @@ class ThirdFactorScope extends StatefulWidget {
 
   ThirdFactorScope({
     Key? key,
-    required String clientId,
+     String clientId = "",
     required ThirdFactorScopeBuilder builder,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)
         transitionBuilder = _defaultTransitionsBuilder,
