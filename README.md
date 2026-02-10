@@ -116,6 +116,10 @@ void startVerification() async {
       if (response.imageBytes != null) {
         print("Image URL: ${response.imageBytes}");
       }
+      // After the verification is completed, the customer receives a verification summary showing their document details, nationality, uploaded document images, and the final verification status.
+      setState(() {
+        tfResponse = response;
+      });
     },
   );
 }
