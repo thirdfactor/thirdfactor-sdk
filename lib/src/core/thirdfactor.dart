@@ -110,7 +110,7 @@ class ThirdFactorScope extends StatefulWidget {
     required String verificationUrl,
     required ValueChanged<TfResponse> onCompletion,
     TfOnboardingOptions? onboardingOptions,
-    VoidCallback? onCancel,
+    VoidCallback? c,
   }) async {
     try {
       final navigatorState = _navKey.currentState;

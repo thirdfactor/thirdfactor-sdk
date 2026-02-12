@@ -23,7 +23,7 @@ class DioClient {
   Future<void> _initializeDio() async {
     _dio = Dio(
       BaseOptions(
-        baseUrl: 'Add_your_url',
+        baseUrl: 'https://khaltitf.prixa.live/tfauth',
         responseType: ResponseType.json,
       ),
     );

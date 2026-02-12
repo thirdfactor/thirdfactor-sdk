@@ -75,12 +75,13 @@ class _TfWebViewState extends State<TfWebView> {
         "TFSDKCHANNEL",
         onMessageReceived: (JavaScriptMessage message) {
           try {
+            Navigator.of(context).pop();
             print("Received message: ${jsonDecode(message.message)['documentPhoto'] }");
             // print("Received message: ${message.}");
             final response = TfResponse.fromJson(message.message);
             // print("Decoded response: $response");
             widget.onCompletion(response);
-            Navigator.of(context).pop();
+
           } catch (e) {
             print("Error decoding response: $e");
             ScaffoldMessenger.of(context).showSnackBar(

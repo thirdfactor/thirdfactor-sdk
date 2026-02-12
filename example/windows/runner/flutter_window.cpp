@@ -2,7 +2,7 @@
 
 #include <optional>
 
-#include "flutter/generated_plugin_registrant.h"
+#include "../../../../../../../Users/prixatech/.pub-cache/hosted/pub.dev/permission_handler-12.0.1/example/windows/flutter/generated_plugin_registrant.h"
 
 FlutterWindow::FlutterWindow(const flutter::DartProject& project)
     : project_(project) {}
