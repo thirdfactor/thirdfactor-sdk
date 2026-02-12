@@ -135,7 +135,7 @@ class _TfWebViewState extends State<TfWebView> {
   }
 
   Future<void> _injectReturnButtonHook() async {
-    print('Injecting Return button hook...');
+
 
     const js = r"""
 (function() {
