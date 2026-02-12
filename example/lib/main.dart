@@ -79,9 +79,11 @@ class _MyHomePageState extends State<MyHomePage> {
         loading = true;
       });
 
-      final url = await dioClient.generateVerificationUrl(
-          jwtToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-      );
+      final url = "https://exp.thirdfactor.ai/tfauth/start?token=9RuHkFWurdz9eLMVMz-r4AqmyR46v-8ejauiwa1wrbm7XTlZTJBeIcbSFY3-wTZC_1_9Z1XZCX6sBEXgefFpCg";
+
+      // await dioClient.generateVerificationUrl(
+      //     jwtToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFuamVsaWthIiwiaXNzIjoiSVo4MzcxUVo0MCIsInRva2VuIjoiM0lSWTY2Mzg0TiIsImlhdCI6MTUxNjIzOTAyMiwiaWRlbnRpZmllciI6IjgwIiwibGFiZWwiOiJBbmplbGlrYSIsInNlY29uZGFyeV9sYWJlbCI6IkFuamVsaWthIiwiaXNfc2RrIjp0cnVlLCJjYWxsYmFjayI6Imh0dHBzOi8vd2ViaG9vay5zaXRlLzAxNzM1OGIxLTI4YWEtNDZhOC1iOWE1LWRjYmE0YjJhOGUzYSJ9.1tM4Dt8t8RoPChBqiUWXOvUdvNhwCHsbJRe5S8-kYGE"
+      // );
 
       if (url != null) {
         setState(() {
@@ -141,6 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     await ThirdFactorScope.of(context).startVerification(
                       verificationUrl: sessionUrl!,
                       onCompletion: (val) {
+                        print("this is the value $val");
                         setState(() {
                           tfResponse = val;
                         });
