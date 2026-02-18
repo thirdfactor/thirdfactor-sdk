@@ -62,7 +62,7 @@ class _TfWebViewState extends State<TfWebView> {
         NavigationDelegate(
           onPageFinished: (_) async {
             if (mounted) setState(() => _isLoading = false);
-            await _injectReturnButtonHook();
+            // await _injectReturnButtonHook();
           },
           onPageStarted: (_) {
             if (mounted) setState(() => _isLoading = true);
@@ -134,71 +134,71 @@ class _TfWebViewState extends State<TfWebView> {
     return status.isGranted;
   }
 
-  Future<void> _injectReturnButtonHook() async {
-
-
-    const js = r"""
-(function() {
-  function hookReturnButton() {
-    try {
-      // EXACT class names from HTML
-      const returnBtn = document.querySelector(
-        'a.thirdfactorst__btn.new__update.btn__theme'
-      );
-
-      if (!returnBtn) {
-        console.log('[TFSDK] Return button not found, retrying...');
-        return false;
-      }
-
-      if (returnBtn.__tf_hooked) {
-        console.log('[TFSDK] Return button already hooked');
-        return true;
-      }
-
-      returnBtn.__tf_hooked = true;
-
-      returnBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        console.log('[TFSDK] Return clicked');
-
-        if (window.TFSDKCHANNEL && window.TFSDKCHANNEL.postMessage) {
-          window.TFSDKCHANNEL.postMessage(JSON.stringify({
-            type: "return",
-            success: false,
-            reason: "user_clicked_return"
-          }));
-        } else {
-          console.log('[TFSDK] TFSDKCHANNEL not available');
-        }
-      }, true);
-
-      console.log('[TFSDK] Return button hook attached ✅');
-      return true;
-    } catch (err) {
-      console.log('[TFSDK] Hook error:', err);
-      return false;
-    }
-  }
-
-  // Retry because Vue may render late
-  let attempts = 0;
-  const interval = setInterval(() => {
-    attempts++;
-    if (hookReturnButton() || attempts > 20) {
-      clearInterval(interval);
-      if (attempts > 20) {
-        console.log('[TFSDK] Gave up finding Return button');
-      }
-    }
-  }, 300);
-})();
-""";
-
-    await webController.runJavaScript(js);
-  }
+//   Future<void> _injectReturnButtonHook() async {
+//
+//
+//     const js = r"""
+// (function() {
+//   function hookReturnButton() {
+//     try {
+//       // EXACT class names from HTML
+//       const returnBtn = document.querySelector(
+//         'a.thirdfactorst__btn.new__update.btn__theme'
+//       );
+//
+//       if (!returnBtn) {
+//         console.log('[TFSDK] Return button not found, retrying...');
+//         return false;
+//       }
+//
+//       if (returnBtn.__tf_hooked) {
+//         console.log('[TFSDK] Return button already hooked');
+//         return true;
+//       }
+//
+//       returnBtn.__tf_hooked = true;
+//
+//       returnBtn.addEventListener('click', function(e) {
+//         e.preventDefault();
+//         e.stopPropagation();
+//
+//         console.log('[TFSDK] Return clicked');
+//
+//         if (window.TFSDKCHANNEL && window.TFSDKCHANNEL.postMessage) {
+//           window.TFSDKCHANNEL.postMessage(JSON.stringify({
+//             type: "return",
+//             success: false,
+//             reason: "user_clicked_return"
+//           }));
+//         } else {
+//           console.log('[TFSDK] TFSDKCHANNEL not available');
+//         }
+//       }, true);
+//
+//       console.log('[TFSDK] Return button hook attached ✅');
+//       return true;
+//     } catch (err) {
+//       console.log('[TFSDK] Hook error:', err);
+//       return false;
+//     }
+//   }
+//
+//   // Retry because Vue may render late
+//   let attempts = 0;
+//   const interval = setInterval(() => {
+//     attempts++;
+//     if (hookReturnButton() || attempts > 20) {
+//       clearInterval(interval);
+//       if (attempts > 20) {
+//         console.log('[TFSDK] Gave up finding Return button');
+//       }
+//     }
+//   }, 300);
+// })();
+// """;
+//
+//     await webController.runJavaScript(js);
+//   }
 
 
 

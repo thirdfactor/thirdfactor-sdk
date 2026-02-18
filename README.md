@@ -1,6 +1,8 @@
 # ThirdFactor Flutter Library
 
-The `thirdfactor` library provides Flutter widgets for initializing the ThirdFactor Verification process in a Flutter application. It includes components for onboarding, web view, and client configurations.
+The `thirdfactor` library provides Flutter widgets for initializing the ThirdFactor Verification
+process in a Flutter application. It includes components for onboarding, web view, and client
+configurations.
 
 ## Installation
 
@@ -27,22 +29,29 @@ import 'package:thirdfactor/thirdfactor.dart';
 
 #### Platform Specific Setup
 
-In your iOS project, you need to add a description for camera usage in the `Info.plist` file. Open `ios/Runner/Info.plist` and add the following lines:
+In your iOS project, you need to add a description for camera usage in the `Info.plist` file. Open
+`ios/Runner/Info.plist` and add the following lines:
 
 ```xml
-<key>NSCameraUsageDescription</key>
-<string>Describe why your application requires access to device camera.</string>
+
+<key>NSCameraUsageDescription</key><string>Describe why your application requires access to device
+camera.
+</string>
 ```
 
-For Android, you'll need to add the camera permission to your `AndroidManifest.xml` file and provide a rationale for the user. Open `android/app/src/main/AndroidManifest.xml` and add the following lines:
+For Android, you'll need to add the camera permission to your `AndroidManifest.xml` file and provide
+a rationale for the user. Open `android/app/src/main/AndroidManifest.xml` and add the following
+lines:
 
 ```xml
+
 <uses-permission android:name="android.permission.CAMERA" />
 ```
 
 ### 2. Initialize ThirdFactorScope
 
-Wrap your application with ThirdFactorScope to enable ThirdFactor Verification where clientId is optional :
+Wrap your application with ThirdFactorScope to enable ThirdFactor Verification where clientId is
+optional :
 
 ```dart
 void main() {
@@ -62,24 +71,26 @@ void main() {
 
 #### Customizing Transition Animation
 
-You can customize the transition animation when pushing or popping routes using the transitionBuilder parameter in ThirdFactorScope.
+You can customize the transition animation when pushing or popping routes using the
+transitionBuilder parameter in ThirdFactorScope.
 
 ```dart
-ThirdFactorScope(
-  // Other parameters ....
-  transitionBuilder: (_, animation, __, child) {
-    const begin = Offset(1.0, 0.0);
-    const end = Offset.zero;
-    const curve = Curves.easeInOut;
-    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-    var offsetAnimation = animation.drive(tween);
-    return SlideTransition(
-      position: offsetAnimation,
-      child: child,
-    );
-  },
-  transitionDuration: Duration(millisecond:300),
-  reverseTransitionDuration: Duration(millisecond:300),
+ThirdFactorScope
+(
+// Other parameters ....
+transitionBuilder: (_, animation, __, child) {
+const begin = Offset(1.0, 0.0);
+const end = Offset.zero;
+const curve = Curves.easeInOut;
+var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+var offsetAnimation = animation.drive(tween);
+return SlideTransition(
+position: offsetAnimation,
+child: child,
+);
+},
+transitionDuration: Duration(millisecond:300),
+reverseTransitionDuration: Duration(millisecond:300),
 )
 ```
 
@@ -88,11 +99,12 @@ ThirdFactorScope(
 You can customize the loading animation when initializing the ThirdFactor Verifcation.
 
 ```dart
-ThirdFactorScope(
-  // Other parameters ....
-  loadingBuilder: (progress) {
-    return YourCustomLoadingWidget();
-  },
+ThirdFactorScope
+(
+// Other parameters ....
+loadingBuilder: (progress) {
+return YourCustomLoadingWidget();
+},
 )
 ```
 
@@ -126,9 +138,11 @@ void startVerification() async {
 
 ```
 
-For more advanced configurations, you can customize the onboarding process using `TfOnboardingOptions`.
+For more advanced configurations, you can customize the onboarding process using
+`TfOnboardingOptions`.
 
 ```dart
+
 TfOnboardingOptions onboardingOptions = TfOnboardingOptions(
   onboardingPages: [
     // Your onboarding pages/widgets here
@@ -146,7 +160,8 @@ TfOnboardingOptions onboardingOptions = TfOnboardingOptions(
   },
   showSkip: false,
   showNext: true,
-  dotsDecorator: TfDotsDecorator(), // Dots decorator customization
+  dotsDecorator: TfDotsDecorator(),
+  // Dots decorator customization
   animationDuration: 500,
   curve: Curves.easeInOut,
   controlsPadding: EdgeInsets.all(32.0),
@@ -154,13 +169,17 @@ TfOnboardingOptions onboardingOptions = TfOnboardingOptions(
   controlAlignment: Alignment.topCenter, // Alignment for control buttons
 );
 ```
+
 ### Handling Responses from Thirdfactor Server
 
-We use a JavaScript channel to handle messages from the Thirdfactor server. This is crucial for processing scanned documents or other data returned from the server.
+We use a JavaScript channel to handle messages from the Thirdfactor server. This is crucial for
+processing scanned documents or other data returned from the server.
 
 ```dart
  tfResponse != null
-? Card(
+?
+Card
+(
 margin: const EdgeInsets.symmetric(horizontal: 8.0),
 child: tfResponse!.documentPhotos != null
 ? Padding(
@@ -176,7 +195,7 @@ shrinkWrap: true,
 physics: const NeverScrollableScrollPhysics(),
 itemCount: tfResponse!.documentPhotos!.length,
 itemBuilder: (context, index) {
-return Padding(
+return Padding(  
 padding: const EdgeInsets.only(bottom: 8.0),
 child: Image.memory(
 base64Decode(
@@ -187,7 +206,7 @@ height: size.height * 0.4,
 );
 },
 )
-: const SizedBox.shrink(),
+    : const SizedBox.shrink(),
 Column(
 crossAxisAlignment: CrossAxisAlignment.start,
 children: [
@@ -198,8 +217,11 @@ Text("documentNumber: ${tfResponse!.documentPhotos![0].documentNumber}"),
 ],
 ),
 )
-: const SizedBox.shrink(),
+    : const SizedBox.shrink(),
 )
-: const SizedBox.shrink(),
-
+    : const SizedBox.shrink
+(
+)
+,
+```
 
